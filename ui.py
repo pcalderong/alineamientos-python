@@ -2,6 +2,7 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from utils import readFile
+from alignment import alignStrings
 
 class alignmentWin:
 
@@ -27,6 +28,10 @@ class alignmentWin:
         self.fcStrB.add_button("OK", 2)
         self.txtStrA = builder.get_object("txtStrA")
         self.txtStrB = builder.get_object("txtStrB")
+        self.spMatch = builder.get_object("spMatch")
+        self.spMismatch = builder.get_object("spMismatch")
+        self.spGapPenalty = builder.get_object("spGapPenalty")
+
         window.show_all()
         self.strAvalid = False
         self.strBvalid = False
@@ -77,6 +82,18 @@ class alignmentWin:
             self.cbNWC.set_sensitive(True)
             self.cbNWR.set_sensitive(True)
 
+    def onCheckboxSelectedR(self, widget):
+        if widget.get_active():
+            self.isNWR = True
+        else:
+            self.isNWR = False
+
+    def onCheckboxSelectedC(self, widget):
+        if widget.get_active():
+            self.isNWC = True
+        else:
+            self.isNWC = False
+
     def onFileSelectedA(self, widget):
         if widget.get_filename():
             self.fileNameA = widget.get_filename()
@@ -92,6 +109,11 @@ class alignmentWin:
     def onResponseB(self, widget, response):
         self.txtStrB.set_text(readFile(self.fileNameB))
         return False
+
+    def onExecuteAlignment(self, widget):
+        print("Now to align")
+        alignStrings(self.spMatch.get_value_as_int(), self.spMismatch.get_value_as_int(),self.spGapPenalty.get_value_as_int(),
+                     self.txtStrA.get_text(), self.txtStrB.get_text(), self.isNW, self.isNWC, self.isNWR, self.isSW)
 
 if __name__=="__main__":
     window = alignmentWin()
