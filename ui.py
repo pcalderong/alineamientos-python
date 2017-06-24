@@ -128,7 +128,7 @@ class alignmentWin:
     def onExecuteAlignment(self, widget):
         print("Now to align")
         results = alignStrings(self.spMatch.get_value_as_int(), self.spMismatch.get_value_as_int(),self.spGapPenalty.get_value_as_int(),
-                     self.txtStrA.get_text(), self.txtStrB.get_text(), self.isNW, self.isNWC, self.isNWR, self.isNWF, self.isSW)
+                     self.txtStrB.get_text(), self.txtStrA.get_text(), self.isNW, self.isNWC, self.isNWR, self.isNWF, self.isSW)
         self.labelStringA.set_text(results[2][0])
         self.labelStringB.set_text(results[2][1])
         self.labelScoringMax.set_text(str(results[2][2]))

@@ -99,7 +99,15 @@ def readGlobalAlignment(mat, arrows, isNWF, stringA, stringB):
     j = len(stringB)
     newAlignmentA = ""
     newAlignmentB = ""
-    scoring, j = getMaxScoring(mat[i],isNWF, i, j)
+    # ATTGTGATC
+    # GTACATTCT
+    result = getMaxScoring(mat[i],isNWF, i, j)
+    scoring = result[0]
+    j = result[1]
+    if j < len(stringB):
+        for k in range(len(stringB)-j):
+            newAlignmentB+=stringB[j-k-1]
+            newAlignmentA+="_"
     while (i >= 0 and j >= 0):
         arrowVec=  arrows[i][j]
         if len(arrowVec) > 0:
@@ -122,7 +130,7 @@ def readGlobalAlignment(mat, arrows, isNWF, stringA, stringB):
         else:
             i = -1
             j = -1
-    return [newAlignmentA[::-1], newAlignmentB[::-1], scoring]
+    return [newAlignmentB[::-1], newAlignmentA[::-1], scoring]
 
 def getMaxScoring(vector, isNWF, i, j):
     maxValue = vector[j]
@@ -134,7 +142,7 @@ def getMaxScoring(vector, isNWF, i, j):
                 maxValue = x
                 newJ = index
             index += 1
-    return maxValue, j
+    return [maxValue, newJ]
 
 
 
