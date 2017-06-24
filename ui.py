@@ -20,6 +20,7 @@ class alignmentWin:
         self.rbLocal.connect("toggled", self.onRBSelected, "local")
         self.cbNWC = builder.get_object("cbNWC")
         self.cbNWR = builder.get_object("cbNWR")
+        self.cbNWF = builder.get_object("cbNWF")
         self.fcStrA = builder.get_object("fcStrA")
         self.fcStrA.add_button("Cancel", 1)
         self.fcStrA.add_button("OK", 2)
@@ -31,7 +32,10 @@ class alignmentWin:
         self.spMatch = builder.get_object("spMatch")
         self.spMismatch = builder.get_object("spMismatch")
         self.spGapPenalty = builder.get_object("spGapPenalty")
-
+        self.labelStringA = builder.get_object("lblStringV")
+        self.labelStringB = builder.get_object("lblStringW")
+        self.labelScoring = builder.get_object("lblScoring")
+        self.labelScoringMax = builder.get_object("lblScoringMax")
         window.show_all()
         self.strAvalid = False
         self.strBvalid = False
@@ -39,6 +43,7 @@ class alignmentWin:
         self.isNW = True
         self.isNWR = False
         self.isNWC = False
+        self.isNWF = False
         self.fileNameA = ""
         self.fileNameB = ""
 
@@ -69,18 +74,22 @@ class alignmentWin:
     def onRBSelected(self, widget, rb):
         self.isNWR = False
         self.isNWC = False
+        self.isNWF = False
         self.cbNWC.set_active(False)
         self.cbNWR.set_active(False)
+        self.cbNWF.set_active(False)
         if rb == "local":
             self.isSW = True
             self.isNW = False
             self.cbNWC.set_sensitive(False)
             self.cbNWR.set_sensitive(False)
+            self.cbNWF.set_sensitive(True)
         else:
             self.isNW = True
             self.isSW = False
             self.cbNWC.set_sensitive(True)
             self.cbNWR.set_sensitive(True)
+            self.cbNWF.set_sensitive(True)
 
     def onCheckboxSelectedR(self, widget):
         if widget.get_active():
@@ -93,6 +102,12 @@ class alignmentWin:
             self.isNWC = True
         else:
             self.isNWC = False
+
+    def onCheckboxSelectedF(self, widget):
+        if widget.get_active():
+            self.isNWF = True
+        else:
+            self.isNWF = False
 
     def onFileSelectedA(self, widget):
         if widget.get_filename():
@@ -112,8 +127,11 @@ class alignmentWin:
 
     def onExecuteAlignment(self, widget):
         print("Now to align")
-        alignStrings(self.spMatch.get_value_as_int(), self.spMismatch.get_value_as_int(),self.spGapPenalty.get_value_as_int(),
-                     self.txtStrA.get_text(), self.txtStrB.get_text(), self.isNW, self.isNWC, self.isNWR, self.isSW)
+        results = alignStrings(self.spMatch.get_value_as_int(), self.spMismatch.get_value_as_int(),self.spGapPenalty.get_value_as_int(),
+                     self.txtStrA.get_text(), self.txtStrB.get_text(), self.isNW, self.isNWC, self.isNWR, self.isNWF, self.isSW)
+        self.labelStringA.set_text(results[2][0])
+        self.labelStringB.set_text(results[2][1])
+        self.labelScoringMax.set_text(str(results[2][2]))
 
 if __name__=="__main__":
     window = alignmentWin()

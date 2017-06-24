@@ -1,10 +1,14 @@
-def alignStrings(match_n, mismatch_n, gapPenalty_n, stringA, stringB, isNW, isNWC, isNWR, isSW):
+def alignStrings(match_n, mismatch_n, gapPenalty_n, stringA, stringB, isNW, isNWC, isNWR, isNWF, isSW):
     mat = []
     if isNW:
         mat = alignNeedlemanWunsh(stringA, stringB, isNWC, isNWR, match_n, mismatch_n, gapPenalty_n)
+        printMatrix(stringA, stringB, mat)
+        alignment = readGlobalAlignment(mat[0], mat[1], isNWF, stringA, stringB)
     else:
         mat = alignSmithWaterman(stringA, stringB)
-    printMatrix(stringA, stringB, mat)
+    # alig
+
+    return[mat[0], mat[1], alignment]
 
 def alignNeedlemanWunsh(stringA, stringB, isNWC, isNWR, match, mismatch, gapPenalty):
     matrix = []
@@ -88,6 +92,51 @@ def alignSmithWaterman(stringA, stringB):
                 vector.append(0)
         matrix.append(vector)
     return matrix
+
+
+def readGlobalAlignment(mat, arrows, isNWF, stringA, stringB):
+    i = len(stringA)
+    j = len(stringB)
+    newAlignmentA = ""
+    newAlignmentB = ""
+    scoring, j = getMaxScoring(mat[i],isNWF, i, j)
+    while (i >= 0 and j >= 0):
+        arrowVec=  arrows[i][j]
+        if len(arrowVec) > 0:
+            for a in arrowVec:
+                if a == "d":
+                    newAlignmentB += stringB[j - 1]
+                    newAlignmentA += stringA[i-1]
+                    j -= 1
+                    i -= 1
+                elif a == "l":
+                    #stringA is column
+                    #stringB is row
+                    newAlignmentB+= stringB[j-1]
+                    newAlignmentA+= "_"
+                    j -= 1
+                elif a == "u":
+                    newAlignmentB += "_"
+                    newAlignmentA += stringA[i-1]
+                    i -= 1
+        else:
+            i = -1
+            j = -1
+    return [newAlignmentA[::-1], newAlignmentB[::-1], scoring]
+
+def getMaxScoring(vector, isNWF, i, j):
+    maxValue = vector[j]
+    index = 0
+    newJ = j
+    if isNWF:
+        for x in vector:
+            if x > maxValue:
+                maxValue = x
+                newJ = index
+            index += 1
+    return maxValue, j
+
+
 
 def printMatrix(stringA, stringB, result):
     mat = result[0]
