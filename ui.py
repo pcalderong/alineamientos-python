@@ -36,6 +36,7 @@ class alignmentWin:
         self.labelStringB = builder.get_object("lblStringW")
         self.labelScoring = builder.get_object("lblScoring")
         self.labelScoringMax = builder.get_object("lblScoringMax")
+        self.layoutTable = builder.get_object("fixedTable")
         window.show_all()
         self.strAvalid = False
         self.strBvalid = False
@@ -132,6 +133,41 @@ class alignmentWin:
         self.labelStringA.set_text(results[2][0])
         self.labelStringB.set_text(results[2][1])
         self.labelScoringMax.set_text(str(results[2][2]))
+        self.printMatrix(results[0], results[1], self.txtStrB.get_text(), self.txtStrA.get_text())
+
+    def printMatrix(self, matrix, arrows, stringA, stringB):
+        x = 160
+        y = 20
+        for i in range(len(stringB)+1):
+            label = Gtk.Label()
+            text = "-"
+            if i > 0:
+                text = stringB[i - 1]
+            label.set_markup("<span color='#13719f'>" + text + "</span>")
+            self.layoutTable.put(label, x, y)
+            label.show()
+            x += 75
+        y += 50
+        x = 75
+
+        for i in range(len(stringA)+1):
+            label = Gtk.Label()
+            text = "-"
+            if i > 0:
+                text = stringA[i-1]
+            label.set_markup("<span color='#ff8847'>" + text + "</span>")
+            self.layoutTable.put(label, x, y)
+            label.show()
+            x += 75
+            for j in range(len(stringB)+1):
+                label = Gtk.Label()
+                label.set_text(str(matrix[i][j]))
+                label.set_width_chars(5)
+                self.layoutTable.put(label, x, y)
+                label.show()
+                x += 75
+            y += 50
+            x = 75
 
 if __name__=="__main__":
     window = alignmentWin()

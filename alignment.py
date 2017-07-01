@@ -6,8 +6,6 @@ def alignStrings(match_n, mismatch_n, gapPenalty_n, stringA, stringB, isNW, isNW
         alignment = readGlobalAlignment(mat[0], mat[1], isNWF, stringA, stringB)
     else:
         mat = alignSmithWaterman(stringA, stringB)
-    # alig
-
     return[mat[0], mat[1], alignment]
 
 def alignNeedlemanWunsh(stringA, stringB, isNWC, isNWR, match, mismatch, gapPenalty):
