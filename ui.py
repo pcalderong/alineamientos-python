@@ -38,6 +38,7 @@ class alignmentWin:
         self.labelScoring = builder.get_object("lblScoring")
         self.labelScoringMax = builder.get_object("lblScoringMax")
         self.layoutTable = builder.get_object("fixedTable")
+        self.bxAlignment = builder.get_object("bxAlignments")
         window.show_all()
         self.strAvalid = False
         self.strBvalid = False
@@ -136,8 +137,14 @@ class alignmentWin:
         self.labelStringB.set_text(results[2][1])
         self.labelScoringMax.set_text(str(results[2][2]))
         self.printMatrix(results[0], results[1], self.txtStrB.get_text(), self.txtStrA.get_text())
-
+        for x in results[3]:
+            label = Gtk.Label()
+            label.set_markup("<span>" + x[0] +" --- " + x[1] +"    Scoring: "+str(x[2])+"</span>")
+            self.bxAlignment.pack_start(label, True, True, 1)
+            label.show()
     def onCleanLayout(self):
+        for i in self.bxAlignment:
+            self.bxAlignment.remove(i)
         for l in self.layoutTable:
             self.layoutTable.remove(l)
 
@@ -169,39 +176,42 @@ class alignmentWin:
                 if i>0:
                     y -= 35
                 if "d" in arrows[i][j]:
-                    arrowD = Gtk.Arrow(Gtk.ArrowType.LEFT, Gtk.ShadowType.IN)
-                    arrowDD = Gtk.Arrow(Gtk.ArrowType.RIGHT, Gtk.ShadowType.IN)
+                    labelD = Gtk.Label()
                     if "w" in arrows[i][j]:
-                        arrowD.modify_fg(Gtk.StateFlags.NORMAL, Gdk.RGBA(0.0, 0.0, 1.0).to_color())
-                        arrowDD.modify_fg(Gtk.StateFlags.NORMAL, Gdk.RGBA(0.0, 0.0, 1.0).to_color())
-                    self.layoutTable.put(arrowD, x , y)
-                    self.layoutTable.put(arrowDD, x, y)
-                    arrowD.show()
-                    arrowDD.show()
-                if "u" in arrows[i][j]:
-                    arrowUp = Gtk.Arrow(Gtk.ArrowType.UP, Gtk.ShadowType.IN)
-                    if "w" in arrows[i][j]:
-                        arrowUp.modify_fg(Gtk.StateFlags.NORMAL, Gdk.RGBA(0.0, 1.0, 0.0).to_color())
-                    if j>0:
-                        self.layoutTable.put(arrowUp, x + 35, y)
+                        labelD.set_markup("<span color='#f03845'>&#8598;</span>")
                     else:
-                        self.layoutTable.put(arrowUp, x+10, y)
-                    arrowUp.show()
+                        labelD.set_markup("<span color='#aaaaaa'>&#8598;</span>")
+                    labelD.set_width_chars(1)
+                    self.layoutTable.put(labelD, x , y)
+                    labelD.show()
+                if "u" in arrows[i][j]:
+                    labelU = Gtk.Label()
+                    if "w" in arrows[i][j]:
+                        labelU.set_markup("<span color='#f03845'>&#8593;</span>")
+                    else:
+                        labelU.set_markup("<span color='#aaaaaa'>&#8593;</span>")
+                    labelU.set_width_chars(1)
+                    if j>0:
+                        self.layoutTable.put(labelU, x + 35, y)
+                    else:
+                        self.layoutTable.put(labelU, x+10, y)
+                    labelU.show()
                 if i>0:
                     y += 35
                 if "l" in arrows[i][j]:
-                    arrowLeft = Gtk.Arrow(Gtk.ArrowType.LEFT, Gtk.ShadowType.IN)
+                    labelL = Gtk.Label()
                     if "w" in arrows[i][j]:
-                        arrowLeft.modify_fg(Gtk.StateFlags.NORMAL, Gdk.RGBA(1.0, 0.0, 0.0).to_color())
+                        labelL.set_markup("<span color='#f03845'>&#8592;</span>")
                     else:
-                        arrowLeft.modify_fg(Gtk.StateFlags.NORMAL, Gdk.RGBA(0.1, 0.1, 0.1).to_color())
-                    self.layoutTable.put(arrowLeft, x, y)
-                    arrowLeft.show()
+                        labelL.set_markup("<span color='#aaaaaa'>&#8592;</span>")
+                    labelL.set_width_chars(1)
+                    self.layoutTable.put(labelL, x, y)
+                    labelL.show()
                 if j>0:
                     x += 25
                 label = Gtk.Label()
                 if "w" in arrows[i][j]:
-                    label.set_markup("<span color='#ef5827'>" + str(matrix[i][j]) + "</span>")
+                    label.set_markup("<span color='#f03845'>" + str(matrix[i][j]) + "</span>")
                 else:
                     label.set_markup("<span color='#aaaaaa'>" + str(matrix[i][j]) + "</span>")
                 label.set_width_chars(5)

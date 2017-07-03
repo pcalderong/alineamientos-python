@@ -5,11 +5,13 @@ def alignStrings(match_n, mismatch_n, gapPenalty_n, stringA, stringB, isNW, isNW
         printMatrix(stringA, stringB, mat)
         alignment = readGlobalAlignment(mat[0], mat[1], isNWF, stringA, stringB)
         mat[1] = alignment[3]
+        return [mat[0], mat[1], alignment]
     elif isSW:
         mat = alignSmithWaterman(stringA, stringB, match_n, mismatch_n, gapPenalty_n)
         printMatrix(stringA, stringB, mat)
-        alignment = readLocalAlignment(mat[0], mat[1], stringA, stringB)
-    return[mat[0], mat[1], alignment]
+        alignments = readLocalAlignment(mat[0], mat[1], stringA, stringB)
+        return [mat[0], mat[1], alignments[0], alignments[1]]
+
 
 def alignNeedlemanWunsh(stringA, stringB, isNWC, isNWR, match, mismatch, gapPenalty):
     matrix = []
@@ -121,8 +123,25 @@ def readLocalAlignment(mat, arrows, stringA, stringB):
     for i in range(lenA, 0, -1):
         for j in range(lenB, 0, -1):
             if(len(arrows[i][j]) > 0):
-                alignments.append(getLocalAlignment(i, j, mat, arrows, stringA, stringB))
-    return sortLocalAlignments(alignments)
+                result = addAlignment(alignments, getLocalAlignment(i, j, mat, arrows, stringA, stringB))
+                if result[0]:
+                    alignments.append(result[1])
+    bestAlignment = sortLocalAlignments(alignments)
+    alignments.remove(bestAlignment)
+    return [bestAlignment, alignments]
+
+
+def addAlignment(list, newAlignm):
+    flag = True
+    for x in list:
+        if newAlignm[0] in x[0] and \
+               newAlignm[1] in x[1] and \
+               x[2]>newAlignm[2]:
+            flag = False
+        elif len(newAlignm[0]) == 1 :
+            flag = False
+    return [flag, newAlignm]
+
 
 def sortLocalAlignments(alignments):
     i = 0
