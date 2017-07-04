@@ -14,6 +14,8 @@ class alignmentWin:
         builder.connect_signals(self)
         window = builder.get_object("winAlign")
         window.set_default_size(1000, 1000)
+        self.boxG = builder.get_object("boxG")
+        self.boxG.modify_bg(Gtk.StateFlags.NORMAL, Gdk.RGBA(1.0, 1.0, 1.0).to_color())
         self.btnAlign = builder.get_object("btnAlign")
         self.rbGlobal = builder.get_object("rbGlobal")
         self.rbLocal = builder.get_object("rbLocal")

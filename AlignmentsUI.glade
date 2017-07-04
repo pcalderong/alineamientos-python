@@ -150,6 +150,7 @@
                             <attributes>
                               <attribute name="font-desc" value="URW Gothic L Semi-Bold 31"/>
                               <attribute name="style" value="normal"/>
+                              <attribute name="foreground" value="#20204a4a8787"/>
                               <attribute name="background" value="#ffffffffffff"/>
                             </attributes>
                           </object>
@@ -563,6 +564,7 @@
                                 <attributes>
                                   <attribute name="font-desc" value="URW Gothic L Book 19"/>
                                   <attribute name="style" value="normal"/>
+                                  <attribute name="foreground" value="#20204a4a8787"/>
                                   <attribute name="background" value="#ffffffffffff"/>
                                 </attributes>
                               </object>
@@ -646,6 +648,7 @@
                                 <attributes>
                                   <attribute name="font-desc" value="URW Gothic L Book 19"/>
                                   <attribute name="style" value="normal"/>
+                                  <attribute name="foreground" value="#20204a4a8787"/>
                                   <attribute name="background" value="#ffffffffffff"/>
                                 </attributes>
                               </object>
