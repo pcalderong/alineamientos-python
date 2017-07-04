@@ -137,11 +137,12 @@ class alignmentWin:
         self.labelStringB.set_text(results[2][1])
         self.labelScoringMax.set_text(str(results[2][2]))
         self.printMatrix(results[0], results[1], self.txtStrB.get_text(), self.txtStrA.get_text())
-        for x in results[3]:
-            label = Gtk.Label()
-            label.set_markup("<span>" + x[0] +" --- " + x[1] +"    Scoring: "+str(x[2])+"</span>")
-            self.bxAlignment.pack_start(label, True, True, 1)
-            label.show()
+        if self.isSW:
+            for x in results[3]:
+                label = Gtk.Label()
+                label.set_markup("<span>" + x[0] +" --- " + x[1] +"    Scoring: "+str(x[2])+"</span>")
+                self.bxAlignment.pack_start(label, True, True, 1)
+                label.show()
     def onCleanLayout(self):
         for i in self.bxAlignment:
             self.bxAlignment.remove(i)
@@ -210,7 +211,7 @@ class alignmentWin:
                 if j>0:
                     x += 25
                 label = Gtk.Label()
-                if "w" in arrows[i][j]:
+                if "w" in arrows[i][j] or i == 0 and j == 0:
                     label.set_markup("<span color='#f03845'>" + str(matrix[i][j]) + "</span>")
                 else:
                     label.set_markup("<span color='#aaaaaa'>" + str(matrix[i][j]) + "</span>")
